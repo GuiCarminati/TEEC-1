@@ -4,27 +4,13 @@ import matplotlib.pyplot as plt
 img = cv2.imread('lena_color.png', cv2.IMREAD_GRAYSCALE)
 
 
-# EXEMPLO AMOSTRAGEM
-def amostragem_down(img, n = 2):
-    return img[::n, ::n] #corta o array img pelo passo n, tanto na altura quanto pra largura.
+def quantizacao(img, n = 2):
+    m = np.amax(img)+1 # pega o valor máximo da imagem
+    a = np.uint8(img/(m/float(n))) # multiplica a imagem pela intensidade e divide pelo valor máximo dela
+    b = np.uint8((a/(n-1.))*255) #transforma de volta pra 0-255 (para exibir a imagem)
+    return b
 
-def amostragem_up(img, n = 2):
-    return np.repeat(np.repeat(img, n, axis=0), n, axis=1) # repete os valores da imagem de forma a criar uma nova imagem com um tamanho maior
+intensidade = 16 # valor da intensidade --> log(intensidade) = numero de bits
 
-plt.imshow(amostragem_down(img, 2), cmap='gray')
+plt.imshow(quantizacao(img, intensidade), cmap='gray')
 plt.show()
-plt.imshow(amostragem_up(img, 2), cmap='gray')
-plt.show()
-
-
-# EXEMPLO QUANTIZACAO
-# def quantizacao(img, n = 2):
-#     m = np.amax(img)+1
-#     a = np.uint8(img/(m/float(n)))
-#     b = np.uint8((a/(n-1.))*255) #transforma de volta pra 0-255 (para exibir a imagem)
-#     return b
-#
-# intensidade = 16 # valor da intensidade --> log(intensidade) = numero de bits
-#
-# plt.imshow(quantizacao(img, intensidade), cmap='gray')
-# plt.show()
